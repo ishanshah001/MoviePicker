@@ -161,7 +161,8 @@ function checkMatch(movieId, password) {
   get(voteRef).then((snapshot) => {
     if (snapshot.exists()) {
       const data = snapshot.val();
-
+      console.log(data)
+      console.log(data.user1)
       // Check if both users have swiped right
       if (data.user1 === 'right' && data.user2 === 'right') {
         resultDiv.textContent = 'It\'s a match!';
