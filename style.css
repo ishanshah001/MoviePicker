@@ -1,0 +1,80 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+  
+  h1 {
+    color: #333;
+  }
+  
+  input {
+    padding: 10px;
+    font-size: 16px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+  }
+  
+  #start-btn {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .movie-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 300px;
+  }
+  
+  .movie-card img {
+    max-width: 100%;
+    border-radius: 8px;
+  }
+  
+  .buttons {
+    margin-top: 20px;
+  }
+  
+  .button {
+    padding: 10px 20px;
+    margin: 5px;
+  }
+  
+  .like {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .dislike {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .result {
+    margin-top: 20px;
+    font-size: 18px;
+  }
+  

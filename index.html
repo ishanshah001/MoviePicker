@@ -26,6 +26,56 @@
     <div class="result" id="result"></div>
   </div>
 
-  <script src="script.js"></script>
+  <!-- Firebase SDK (v9+) -->
+  <script type="module">
+    // Import Firebase functions
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyB0Pb-j6Sr4sDDCdwOm6N_UEYPofjsaadw",
+      authDomain: "moviepicker-b71da.firebaseapp.com",
+      projectId: "moviepicker-b71da",
+      storageBucket: "moviepicker-b71da.firebasestorage.app",
+      messagingSenderId: "971993344619",
+      appId: "1:971993344619:web:659b3e3dcdc42a3c195f2e",
+      measurementId: "G-2NSCXY5NNX"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app); // Correct use of getDatabase()
+
+    // Example function to write data to Firebase
+    function writeData(path, data) {
+      set(ref(database, path), data)
+        .then(() => {
+          console.log("Data saved successfully!");
+        })
+        .catch((error) => {
+          console.error("Error saving data: ", error);
+        });
+    }
+
+    // Example function to read data from Firebase
+    function readData(path) {
+      const dbRef = ref(database);
+      get(child(dbRef, path))
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            console.log(snapshot.val());
+          } else {
+            console.log("No data available");
+          }
+        })
+        .catch((error) => {
+          console.error("Error reading data: ", error);
+        });
+    }
+  </script>
+
+  <!-- Custom JS -->
+  <script type="module" src="script.js"></script> <!-- Include your app's JavaScript -->
 </body>
 </html>
