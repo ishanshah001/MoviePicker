@@ -76,11 +76,11 @@
   }
 
   // Swipe Right (like)
-  window.swipeRight = function() {
+  window.swipeRight = async function() {
     console.log(`Movie "${movies[currentMovieIndex].title}" liked`);
 
     // Save the vote in Firebase
-    saveVote(movies[currentMovieIndex].id, sharedPassword, 'right');
+    await saveVote(movies[currentMovieIndex].id, sharedPassword, 'right');
 
     // Check if both users liked the same movie
     checkMatch(movies[currentMovieIndex].id, sharedPassword);
@@ -161,8 +161,6 @@ function checkMatch(movieId, password) {
   get(voteRef).then((snapshot) => {
     if (snapshot.exists()) {
       const data = snapshot.val();
-      console.log(data)
-      console.log(data.user1)
       // Check if both users have swiped right
       if (data.user1 === 'right' && data.user2 === 'right') {
         resultDiv.textContent = 'It\'s a match!';
