@@ -88,6 +88,10 @@ const movies = [
   
     nextMovie();
   }
+
+  // Add event listeners
+  document.getElementById('swipe-left').addEventListener('click', swipeLeft);
+  document.getElementById('swipe-right').addEventListener('click', swipeRight);
   
   // Move to the next movie
   function nextMovie() {
