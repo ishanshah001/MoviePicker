@@ -1,3 +1,23 @@
+// Import Firebase functions
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyB0Pb-j6Sr4sDDCdwOm6N_UEYPofjsaadw",
+  authDomain: "moviepicker-b71da.firebaseapp.com",
+  projectId: "moviepicker-b71da",
+  databaseURL: "https://moviepicker-b71da-default-rtdb.firebaseio.com",
+  storageBucket: "moviepicker-b71da.firebasestorage.app",
+  messagingSenderId: "971993344619",
+  appId: "1:971993344619:web:659b3e3dcdc42a3c195f2e",
+  measurementId: "G-2NSCXY5NNX"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+// const database = getDatabase(app); // Correct use of getDatabase()
+
 // Define some example movies
 const movies = [
     { id: 1, title: 'Movie 1', poster: 'https://via.placeholder.com/150' },
@@ -77,7 +97,7 @@ const movies = [
   
  // Using Modular SDK to save a vote
 function saveVote(movieId, password, direction) {
-    const db = getDatabase();
+    const db = getDatabase(app); // Correct use of getDatabase()
     const voteRef = ref(db, `votes/${password}/${movieId}`);
     set(voteRef, {
       direction: direction
