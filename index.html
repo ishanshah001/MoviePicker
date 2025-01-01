@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie Picker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="setup-screen">
+    <h1>Movie Picker</h1>
+    <p>Enter a shared password to start:</p>
+    <input type="password" id="shared-password" placeholder="Enter Password">
+    <button id="start-btn">Start</button>
+  </div>
+
+  <div id="swipe-screen" style="display: none;">
+    <h1>Date Night Movie Picker</h1>
+    <div class="movie-card" id="movie-card">
+      <img src="" alt="Movie Poster" id="movie-poster">
+      <h2 id="movie-title">Movie Title</h2>
+      <div class="buttons">
+        <button class="button dislike" onclick="swipeLeft()">Swipe Left</button>
+        <button class="button like" onclick="swipeRight()">Swipe Right</button>
+      </div>
+    </div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
