@@ -134,7 +134,7 @@
       
       // Save the vote to Firebase
       if (user==='user1')
-        update(voteRef, userVote)
+        set(voteRef, userVote)
           .then(() => {
             console.log(`${user} voted "${direction}" for movie ID: ${movieId}`);
           })
@@ -142,7 +142,7 @@
             console.error("Error saving vote: ", error);
           });
         else{
-          set(voteRef, userVote)
+          update(voteRef, userVote)
           .then(() => {
             console.log(`${user} voted "${direction}" for movie ID: ${movieId}`);
           })
