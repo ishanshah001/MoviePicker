@@ -70,13 +70,13 @@ const movies = [
   }
   
   // Swipe Left (dislike)
-  function swipeLeft() {
+  window.swipeLeft = function(){
     console.log(`Movie "${movies[currentMovieIndex].title}" disliked`);
     nextMovie();
   }
   
   // Swipe Right (like)
-  function swipeRight() {
+  window.swipeRight = function() {
     console.log(`Movie "${movies[currentMovieIndex].title}" liked`);
   
     // Save the vote in Firebase
@@ -88,10 +88,6 @@ const movies = [
   
     nextMovie();
   }
-
-  // Add event listeners
-  document.getElementById('swipe-left').addEventListener('click', swipeLeft);
-  document.getElementById('swipe-right').addEventListener('click', swipeRight);
   
   // Move to the next movie
   function nextMovie() {
