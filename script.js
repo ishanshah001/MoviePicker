@@ -155,7 +155,7 @@
 
 // Checking for a match (both users must swipe right)
 function checkMatch(movieId, password) {
-  const db = getDatabase();
+  const db = getDatabase(app);
   const voteRef = ref(db, `votes/${password}/${movieId}`);
   
   get(voteRef).then((snapshot) => {
