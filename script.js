@@ -122,27 +122,23 @@
 
  // Save the vote (for both users)
  function saveVote(movieId, password, direction) {
-  checkUserTurn(password, movieId)
-    .then((user) => {
-      if (user) {
-        const db = getDatabase(app);
-        const voteRef = ref(db, `votes/${password}/${movieId}`);
-        
-        // Save the vote based on the user turn
-        const userVote = {
-          [user]: direction
-        };
-        
-        // Save the vote to Firebase
-        set(voteRef, userVote)
-          .then(() => {
-            console.log(`${user} voted "${direction}" for movie ID: ${movieId}`);
-          })
-          .catch((error) => {
-            console.error("Error saving vote: ", error);
-          });
-      }
-    });
+      var user = checkUserTurn(password, movieId);
+      const db = getDatabase(app);
+      const voteRef = ref(db, `votes/${password}/${movieId}`);
+      
+      // Save the vote based on the user turn
+      const userVote = {
+        [user]: direction
+      };
+      
+      // Save the vote to Firebase
+      set(voteRef, userVote)
+        .then(() => {
+          console.log(`${user} voted "${direction}" for movie ID: ${movieId}`);
+        })
+        .catch((error) => {
+          console.error("Error saving vote: ", error);
+        });
 }
 
 
