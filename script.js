@@ -133,7 +133,7 @@
       };
       
       // Save the vote to Firebase
-      set(voteRef, userVote)
+      update(voteRef, userVote)
         .then(() => {
           console.log(`${user} voted "${direction}" for movie ID: ${movieId}`);
         })
