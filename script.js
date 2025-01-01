@@ -123,6 +123,7 @@
  // Save the vote (for both users)
  function saveVote(movieId, password, direction) {
       var user = checkUserTurn(password, movieId);
+      console.log(user);
       const db = getDatabase(app);
       const voteRef = ref(db, `votes/${password}/${movieId}`);
       
