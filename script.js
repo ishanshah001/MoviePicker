@@ -94,33 +94,35 @@
     loadMovie();
   }
 
-  // Save the vote (either 'right' or 'left') to Firebase
-  function saveVote(movieId, password, direction) {
-    const db = getDatabase(app);
-    const voteRef = ref(db, `votes/${password}/${movieId}`);
-    set(voteRef, {
-      [sharedPassword]: direction
-    });
-  }
+ // Save the vote (for both users)
+function saveVote(movieId, password, direction, user) {
+  const db = getDatabase(app);
+  const voteRef = ref(db, `votes/${password}/${movieId}`);
+  
+  set(voteRef, {
+    [user]: direction
+  });
+}
 
-  // Checking for a match (both users must swipe right)
-  function checkMatch(movieId, password) {
-    const db = getDatabase();
-    const voteRef = ref(db, `votes/${password}/${movieId}`);
-    get(voteRef).then((snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.val();
+// Checking for a match (both users must swipe right)
+function checkMatch(movieId, password) {
+  const db = getDatabase();
+  const voteRef = ref(db, `votes/${password}/${movieId}`);
+  
+  get(voteRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      const data = snapshot.val();
 
-        // Check if both users have swiped right
-        if (data.user1 === 'right' && data.user2 === 'right') {
-          resultDiv.textContent = 'It\'s a match!';
-        } else {
-          resultDiv.textContent = 'No match yet.';
-        }
+      // Check if both users have swiped right
+      if (data.user1 === 'right' && data.user2 === 'right') {
+        resultDiv.textContent = 'It\'s a match!';
       } else {
-        resultDiv.textContent = 'No votes recorded yet.';
+        resultDiv.textContent = 'No match yet.';
       }
-    }).catch((error) => {
-      console.error('Error reading from Firebase', error);
-    });
-  }
+    } else {
+      resultDiv.textContent = 'No votes recorded yet.';
+    }
+  }).catch((error) => {
+    console.error('Error reading from Firebase', error);
+  }); 
+}
