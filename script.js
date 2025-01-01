@@ -133,13 +133,23 @@
       };
       
       // Save the vote to Firebase
-      update(voteRef, userVote)
-        .then(() => {
-          console.log(`${user} voted "${direction}" for movie ID: ${movieId}`);
-        })
-        .catch((error) => {
-          console.error("Error saving vote: ", error);
-        });
+      if (user==='user1')
+        update(voteRef, userVote)
+          .then(() => {
+            console.log(`${user} voted "${direction}" for movie ID: ${movieId}`);
+          })
+          .catch((error) => {
+            console.error("Error saving vote: ", error);
+          });
+        else{
+          set(voteRef, userVote)
+          .then(() => {
+            console.log(`${user} voted "${direction}" for movie ID: ${movieId}`);
+          })
+          .catch((error) => {
+            console.error("Error saving vote: ", error);
+          });
+        }
 }
 
 
