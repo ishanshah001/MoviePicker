@@ -94,15 +94,57 @@
     loadMovie();
   }
 
- // Save the vote (for both users)
-function saveVote(movieId, password, direction, user) {
-  const db = getDatabase(app);
-  const voteRef = ref(db, `votes/${password}/${movieId}`);
+  function checkUserTurn(password, movieId) {
+    const db = getDatabase(app);
+    const voteRef = ref(db, `votes/${password}/${movieId}`);
+    
+    // Check if vote data exists for the movie
+    return get(voteRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          // Check if user1 has voted, then it's user2's turn
+          const data = snapshot.val();
+          if (data.user1) {
+            return 'user2'; // It's user2's turn
+          } else {
+            return 'user1'; // It's user1's turn
+          }
+        } else {
+          return 'user1'; // It's user1's turn because no votes yet
+        }
+      })
+      .catch((error) => {
+        console.error("Error checking user turn: ", error);
+        return null;
+      });
+  }
   
-  set(voteRef, {
-    [user]: direction
-  });
+
+ // Save the vote (for both users)
+ function saveVote(movieId, password, direction) {
+  checkUserTurn(password, movieId)
+    .then((user) => {
+      if (user) {
+        const db = getDatabase(app);
+        const voteRef = ref(db, `votes/${password}/${movieId}`);
+        
+        // Save the vote based on the user turn
+        const userVote = {
+          [user]: direction
+        };
+        
+        // Save the vote to Firebase
+        set(voteRef, userVote)
+          .then(() => {
+            console.log(`${user} voted "${direction}" for movie ID: ${movieId}`);
+          })
+          .catch((error) => {
+            console.error("Error saving vote: ", error);
+          });
+      }
+    });
 }
+
 
 // Checking for a match (both users must swipe right)
 function checkMatch(movieId, password) {
