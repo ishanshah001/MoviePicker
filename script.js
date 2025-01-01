@@ -1,33 +1,32 @@
-// Import Firebase functions
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+  // Import Firebase functions
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+  import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyB0Pb-j6Sr4sDDCdwOm6N_UEYPofjsaadw",
-  authDomain: "moviepicker-b71da.firebaseapp.com",
-  projectId: "moviepicker-b71da",
-  databaseURL: "https://moviepicker-b71da-default-rtdb.firebaseio.com",
-  storageBucket: "moviepicker-b71da.firebasestorage.app",
-  messagingSenderId: "971993344619",
-  appId: "1:971993344619:web:659b3e3dcdc42a3c195f2e",
-  measurementId: "G-2NSCXY5NNX"
-};
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyB0Pb-j6Sr4sDDCdwOm6N_UEYPofjsaadw",
+    authDomain: "moviepicker-b71da.firebaseapp.com",
+    projectId: "moviepicker-b71da",
+    databaseURL: "https://moviepicker-b71da-default-rtdb.firebaseio.com",
+    storageBucket: "moviepicker-b71da.firebasestorage.app",
+    messagingSenderId: "971993344619",
+    appId: "1:971993344619:web:659b3e3dcdc42a3c195f2e",
+    measurementId: "G-2NSCXY5NNX"
+  };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-// const database = getDatabase(app); // Correct use of getDatabase()
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
 
-// Define some example movies
-const movies = [
+  // Define some example movies
+  const movies = [
     { id: 1, title: 'Movie 1', poster: 'https://via.placeholder.com/150' },
     { id: 2, title: 'Movie 2', poster: 'https://via.placeholder.com/150' },
-    { id: 3, title: 'Movie 3', poster: 'https://via.placeholder.com/150' },
+    { id: 3, title: 'Movie 3', poster: 'https://via.placeholder.com/150' }
   ];
-  
+
   let currentMovieIndex = 0;
   let sharedPassword = "";
-  
+
   // Select elements
   const startButton = document.getElementById("start-btn");
   const sharedPasswordInput = document.getElementById("shared-password");
@@ -37,7 +36,7 @@ const movies = [
   const moviePoster = document.getElementById("movie-poster");
   const movieTitle = document.getElementById("movie-title");
   const resultDiv = document.getElementById("result");
-  
+
   // Start button click handler
   startButton.addEventListener("click", () => {
     const inputPassword = sharedPasswordInput.value.trim();
@@ -46,15 +45,15 @@ const movies = [
       return;
     }
     sharedPassword = inputPassword;
-  
+
     // Transition screens
     setupScreen.style.display = "none";
     swipeScreen.style.display = "block";
-  
+
     // Load the first movie
     loadMovie();
   });
-  
+
   // Load a movie onto the screen
   function loadMovie() {
     if (currentMovieIndex >= movies.length) {
@@ -62,61 +61,66 @@ const movies = [
       movieCard.style.display = "none";
       return;
     }
-  
+
     const movie = movies[currentMovieIndex];
     moviePoster.src = movie.poster;
     movieTitle.textContent = movie.title;
     resultDiv.textContent = "";
   }
-  
+
   // Swipe Left (dislike)
-  window.swipeLeft = function(){
+  window.swipeLeft = function() {
     console.log(`Movie "${movies[currentMovieIndex].title}" disliked`);
+    saveVote(movies[currentMovieIndex].id, sharedPassword, 'left');
     nextMovie();
   }
-  
+
   // Swipe Right (like)
   window.swipeRight = function() {
     console.log(`Movie "${movies[currentMovieIndex].title}" liked`);
-  
+
     // Save the vote in Firebase
-    const movie = movies[currentMovieIndex];
-    saveVote(movie.id, sharedPassword, 'right');
-  
+    saveVote(movies[currentMovieIndex].id, sharedPassword, 'right');
+
     // Check if both users liked the same movie
-    checkMatch(movie.id, sharedPassword);
-  
+    checkMatch(movies[currentMovieIndex].id, sharedPassword);
+
     nextMovie();
   }
-  
+
   // Move to the next movie
   function nextMovie() {
     currentMovieIndex++;
     loadMovie();
   }
-  
- // Using Modular SDK to save a vote
-function saveVote(movieId, password, direction) {
-    const db = getDatabase(app); // Correct use of getDatabase()
+
+  // Save the vote (either 'right' or 'left') to Firebase
+  function saveVote(movieId, password, direction) {
+    const db = getDatabase(app);
     const voteRef = ref(db, `votes/${password}/${movieId}`);
     set(voteRef, {
-      direction: direction
+      [sharedPassword]: direction
     });
   }
-  
-  // Checking for a match
+
+  // Checking for a match (both users must swipe right)
   function checkMatch(movieId, password) {
     const db = getDatabase();
     const voteRef = ref(db, `votes/${password}/${movieId}`);
     get(voteRef).then((snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.val();
-        if (data.direction === 'right') {
-          document.getElementById('result').textContent = 'It\'s a match!';
+
+        // Check if both users have swiped right
+        if (data.user1 === 'right' && data.user2 === 'right') {
+          resultDiv.textContent = 'It\'s a match!';
+        } else {
+          resultDiv.textContent = 'No match yet.';
         }
+      } else {
+        resultDiv.textContent = 'No votes recorded yet.';
       }
     }).catch((error) => {
       console.error('Error reading from Firebase', error);
     });
   }
-  
